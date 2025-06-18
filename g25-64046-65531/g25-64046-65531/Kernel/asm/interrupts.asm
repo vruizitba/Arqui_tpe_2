@@ -25,21 +25,24 @@ extern syscall_dispatcher
 
 GLOBAL registers_state
 GLOBAL userland_registers_state
+GLOBAL userland_registers_state_aux
 
 SECTION .bss
-registers_state: resq 17
-userland_registers_state: resq 17
+registers_state: resq 19
+userland_registers_state: resq 19
+userland_registers_state_aux: resq 19
 aux resq 1
 
 SECTION .text
 
-%macro saveRegisters 1
+%macro saveRegistersKernel 1
     mov [%1 + 0*8], rax
     mov [%1 + 1*8], rbx
     mov [%1 + 2*8], rcx
     mov [%1 + 3*8], rdx
     mov [%1 + 4*8], rbp
-    mov [%1 + 5*8], rsp
+    mov rax, [rsp+8*3]      ; rsp anterior a la llamada
+    mov [%1 + 5*8], rax
     mov [%1 + 6*8], rsi
     mov [%1 + 7*8], rdi
     mov [%1 + 8*8], r8
@@ -50,49 +53,53 @@ SECTION .text
     mov [%1 + 13*8], r13
     mov [%1 + 14*8], r14
     mov [%1 + 15*8], r15
-    mov rax, [rsp]
+    mov rax, [rsp]          ; rip kernel
     mov [%1 + 16*8], rax
+    mov rax, [rsp+8*2]      ; rflags
+    mov [%1 + 17*8], rax
+    mov rax, [rsp+8]        ; cs
+    mov [%1 + 18*8], rax
+    mov rax, [%1 + 0*8]          ; restauro rax
+%endmacro
+
+%macro saveRegistersUserland 1
+    mov [%1 + 0*8], rax
+    mov [%1 + 1*8], rbx
+    mov [%1 + 2*8], rcx
+    mov [%1 + 3*8], rdx
+    mov [%1 + 4*8], rbp
+    mov rax, [rsp+8*3]      ; rsp anterior a la llamada
+    mov [%1 + 5*8], rax
+    mov [%1 + 6*8], rsi
+    mov [%1 + 7*8], rdi
+    mov [%1 + 8*8], r8
+    mov [%1 + 9*8], r9
+    mov [%1 + 10*8], r10
+    mov [%1 + 11*8], r11
+    mov [%1 + 12*8], r12
+    mov [%1 + 13*8], r13
+    mov [%1 + 14*8], r14
+    mov [%1 + 15*8], r15
+    mov rax, [rsp]      ; rip userland
+    mov [%1 + 16*8], rax
+    mov rax, [rsp+8*2]      ; rflags
+    mov [%1 + 17*8], rax
+    mov rax, [rsp+8]        ; cs
+    mov [%1 + 18*8], rax
+    mov rax, [%1 + 0*8]     ; restauro rax
 %endmacro
 
 _syscallHandler:
-    push rbx
-    push rcx
-    push rdx
-    push rsi
-    push rdi
-    push rbp
-    push r8
-    push r9
-    push r10
-    push r11
-    push r12
-    push r13
-    push r14
-    push r15
+    pushState
 
     mov rdi, rax
     mov rsi, rbx
     mov rdx, rcx
     mov rcx, r8
 
-    saveRegisters userland_registers_state
-
     call syscall_dispatcher
 
-    pop r15
-    pop r14
-    pop r13
-    pop r12
-    pop r11
-    pop r10
-    pop r9
-    pop r8
-    pop rbp
-    pop rdi
-    pop rsi
-    pop rdx
-    pop rcx
-    pop rbx
+    popState
     iretq
 
 %macro pushState 0
@@ -148,7 +155,7 @@ _syscallHandler:
 
 
 %macro exceptionHandler 1
-	saveRegisters registers_state
+	saveRegistersKernel registers_state
 	pushState
 
 	mov rdi, %1 ; pasaje de parametro
@@ -199,6 +206,7 @@ _irq00Handler:
 
 ;Keyboard
 _irq01Handler:
+    saveRegistersUserland userland_registers_state_aux
 	irqHandlerMaster 1
 
 ;Cascade pic never called

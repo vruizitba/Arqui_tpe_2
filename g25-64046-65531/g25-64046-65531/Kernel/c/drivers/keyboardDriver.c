@@ -63,7 +63,8 @@ const uint8_t scancodeToChar[128][3] = {
     {0, 0, 0},           // 58
 };
 
-extern  uint8_t inb(uint16_t port);
+extern uint8_t inb(uint16_t port);
+extern void _update_registers_userland();
 
 void static print_scancode(uint8_t c);
 void static buffer(uint8_t c);
@@ -93,6 +94,10 @@ void keyboard_handler() {
     uint8_t key = inb(0x60);
 
     uint8_t keyAscii  = scancodeToChar[key][0];
+
+    if (keyAscii == '\t') {
+        _update_registers_userland();
+    }
 
     if (key & 0x80) {
         if (discriminateKeys == 1) {

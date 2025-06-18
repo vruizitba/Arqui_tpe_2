@@ -5,7 +5,7 @@
 
 #define ZERO_EXCEPTION_ID 0
 #define INVALID_OPCODE_ID 6
-#define CANT_REGISTERS 17
+#define CANT_REGISTERS 19
 #define MAX_HEXA_LENGTH 20
 
 

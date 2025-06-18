@@ -8,7 +8,7 @@
 static uint8_t bcd_to_dec(uint8_t bcd);
 
 extern void haltcpu(void);
-extern uint64_t userland_registers_state[17];
+extern uint64_t userland_registers_state[CANT_REGISTERS];
 extern  uint8_t inb(uint16_t port);
 extern  void outb(uint16_t port, uint8_t val);
 extern  void outw(uint16_t port, uint16_t val);
@@ -134,7 +134,7 @@ uint64_t sys_time(int timezone) {
 
 void sys_get_registers(uint64_t * buffer) {
     for (int i = 0; i < CANT_REGISTERS; i++)
-        (buffer)[i] = userland_registers_state[i];
+        buffer[i] = userland_registers_state[i];
 }
 
 uint64_t sys_exit(uint64_t exit_code) {

@@ -198,19 +198,19 @@ static void int_to_hex_char(uint64_t value, uint8_t * buffer) {
 }
 
 void registers_shell() {
-    uint64_t regs[17];
+    uint64_t regs[CANT_REGISTERS];
     _syscall(SYS_GET_REGISTERS, 0, (uint64_t)regs, 0);
 
     const uint8_t* regNames[] = {
-        "RAX", "RBX", "RCX", "RDX", "RBP", "RSP",
-        "RSI", "RDI", "R8 ", "R9 ", "R10", "R11",
-        "R12", "R13", "R14", "R15", "RIP"
+        "RAX   ", "RBX   ", "RCX   ", "RDX   ", "RBP   ", "RSP   ",
+        "RSI   ", "RDI   ", "R8    ", "R9    ", "R10   ", "R11   ",
+        "R12   ", "R13   ", "R14   ", "R15   ", "RIP   ", "RFLAGS", "CS    "
     };
 
     uint8_t hex_buffer[MAX_HEXA_LENGTH];
 
     puts("Registros actuales:");
-    for (uint64_t i = 0; i < 17; i++) {
+    for (uint64_t i = 0; i < CANT_REGISTERS; i++) {
         int_to_hex_char(regs[i], hex_buffer);
         printf("%s: %s\n", regNames[i], hex_buffer);
     }

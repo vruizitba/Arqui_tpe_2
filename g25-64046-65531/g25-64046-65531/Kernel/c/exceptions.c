@@ -18,7 +18,9 @@ typedef enum {
     R13 = 13,
     R14 = 14,
     R15 = 15,
-    RIP = 16
+    RIP = 16,
+    RFLAGS = 17,
+    CS = 18
 } RegisterID;
 
 void exceptionDispatcher(uint64_t exception) {
@@ -64,9 +66,9 @@ void printRegisters() {
     uint8_t buffer[MAX_HEXA_LENGTH];
 
     const uint8_t* reg_names[] = {
-        "RAX", "RBX", "RCX", "RDX", "RBP", "RSP", 
-        "RSI", "RDI", "R8 ", "R9 ", "R10", "R11", 
-        "R12", "R13", "R14", "R15", "RIP"
+        "RAX   ", "RBX   ", "RCX   ", "RDX   ", "RBP   ", "RSP   ",
+        "RSI   ", "RDI   ", "R8    ", "R9    ", "R10   ", "R11   ",
+        "R12   ", "R13   ", "R14   ", "R15   ", "RIP   ", "RFLAGS", "CS    "
     };
 
     for(int i = 0; i < CANT_REGISTERS; i++) {

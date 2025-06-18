@@ -29,6 +29,7 @@
 #define HEIGHT 3
 #define RECTANGLE_ELEMS 4
 #define CIRCLE_ELEMS 3
+#define CANT_REGISTERS 19
 
 
 void start_shell();
