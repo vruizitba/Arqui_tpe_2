@@ -76,6 +76,7 @@ static uint8_t discriminateKeys = 0;
 static uint8_t * keyToDiscriminate;
 static uint8_t bufferArray[BUFFER_SIZE];
 static uint64_t bufferElements = 0;
+static uint8_t registersCaptured = 0;
 
 void enable_discriminated_keys() {
     discriminateKeys = 1;
@@ -95,6 +96,7 @@ void keyboard_handler() {
 
     if (key == 0x01) {
         _update_registers_userland();
+        registersCaptured = 1;
     }
 
     uint8_t keyAscii  = scancodeToChar[key][0];
@@ -147,7 +149,7 @@ void keyboard_handler() {
     if (keyAscii == 0) {
         return;
     }
-    
+
     if (keyAscii == '\b' && isActivated) {
         print_scancode(keyAscii);
         buffer(keyAscii);
@@ -207,4 +209,8 @@ void free_buffer() {
 
 uint8_t * get_buffer() {
     return bufferArray;
+}
+
+uint8_t isRegistersCaptured() {
+    return registersCaptured;
 }

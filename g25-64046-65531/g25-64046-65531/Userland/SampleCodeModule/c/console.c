@@ -199,7 +199,10 @@ static void int_to_hex_char(uint64_t value, uint8_t * buffer) {
 
 void registers_shell() {
     uint64_t regs[CANT_REGISTERS];
-    _syscall(SYS_GET_REGISTERS, 0, (uint64_t)regs, 0);
+    if (_syscall(SYS_GET_REGISTERS, 0, (uint64_t)regs, 0) != 0) {
+        puts("Registers not captured yet");
+        return;
+    }
 
     const uint8_t* regNames[] = {
         "RAX   ", "RBX   ", "RCX   ", "RDX   ", "RBP   ", "RSP   ",

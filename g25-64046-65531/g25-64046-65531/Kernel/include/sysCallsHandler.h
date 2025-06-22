@@ -46,7 +46,7 @@ void sys_ioctl(uint64_t cmd, uint64_t arg);
 
 uint64_t sys_time(int timezone);
 
-void sys_get_registers(uint64_t * buffer);
+uint8_t sys_get_registers(uint64_t * buffer);
 
 uint64_t sys_exit(uint64_t exit_code);
 

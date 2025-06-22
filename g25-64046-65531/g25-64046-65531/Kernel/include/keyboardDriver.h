@@ -29,5 +29,7 @@ void disable_discriminated_keys();
 
 void set_discrimanted_keys(uint8_t* keys);
 
+uint8_t isRegistersCaptured();
+
 
 #endif //KEYBOARD_H

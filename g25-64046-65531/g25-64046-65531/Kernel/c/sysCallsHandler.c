@@ -132,9 +132,10 @@ uint64_t sys_time(int timezone) {
     return (hours * 3600) + (minutes * 60) + seconds;
 }
 
-void sys_get_registers(uint64_t * buffer) {
+uint8_t sys_get_registers(uint64_t * buffer) {
     for (int i = 0; i < CANT_REGISTERS; i++)
         buffer[i] = userland_registers_state[i];
+    return !isRegistersCaptured();
 }
 
 uint64_t sys_exit(uint64_t exit_code) {
