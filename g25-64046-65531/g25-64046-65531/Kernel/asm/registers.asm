@@ -1,4 +1,4 @@
-EXTERN registers_state
+EXTERN exceptions_registers_state
 EXTERN userland_registers_state
 EXTERN userland_registers_state_aux
 
@@ -18,7 +18,7 @@ _get_registers:
     push rbp
     mov rbp, rsp
 
-    copyRegisters registers_state
+    copyRegisters exceptions_registers_state
 
     mov rsp, rbp
     pop rbp

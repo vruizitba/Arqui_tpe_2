@@ -23,14 +23,14 @@ EXTERN irqDispatcher
 EXTERN exceptionDispatcher
 extern syscall_dispatcher
 
-GLOBAL registers_state
+GLOBAL exceptions_registers_state
 GLOBAL userland_registers_state
 GLOBAL userland_registers_state_aux
 
 ALIGN 8
 
 SECTION .bss
-registers_state: resq 19
+exceptions_registers_state: resq 19
 userland_registers_state: resq 19
 userland_registers_state_aux: resq 19
 aux resq 1
@@ -130,7 +130,7 @@ _syscallHandler:
 
 
 %macro exceptionHandler 1
-	saveRegisters registers_state
+	saveRegisters exceptions_registers_state
 	pushState
 
 	mov rdi, %1 ; pasaje de parametro
