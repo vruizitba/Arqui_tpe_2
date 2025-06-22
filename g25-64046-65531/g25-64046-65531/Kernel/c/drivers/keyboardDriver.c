@@ -3,7 +3,7 @@
 
 const uint8_t scancodeToChar[128][3] = {
     {0, 0, 0},           // 0
-    {27, 27, 27},        // 1  ESC
+    {0, 0, 0},           // 1  ESC
     {'1', '!', '1'},     // 2
     {'2', '@', '2'},     // 3
     {'3', '#', '3'},     // 4
@@ -93,11 +93,11 @@ void keyboard_handler() {
 
     uint8_t key = inb(0x60);
 
-    uint8_t keyAscii  = scancodeToChar[key][0];
-
-    if (keyAscii == '\t') {
+    if (key == 0x01) {
         _update_registers_userland();
     }
+
+    uint8_t keyAscii  = scancodeToChar[key][0];
 
     if (key & 0x80) {
         if (discriminateKeys == 1) {
@@ -144,6 +144,10 @@ void keyboard_handler() {
         }
     }
 
+    if (keyAscii == 0) {
+        return;
+    }
+    
     if (keyAscii == '\b' && isActivated) {
         print_scancode(keyAscii);
         buffer(keyAscii);
