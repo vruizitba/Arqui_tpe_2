@@ -47,10 +47,10 @@ static char* manualPages[] = {
     "SYNOPSIS\n"
     "       registers\n\n"
     "DESCRIPTION\n"
-    "       Displays the current state of system registers.\n"
+    "       Displays the state of the system registers at the time of the last capture triggered with ESC\n"
     "       Useful for debugging and system monitoring.\n\n"
     "EXAMPLES\n"
-    "       registers    Show current register values\n\n",
+    "       registers    Show last saved register values\n\n",
 
     // font
     "FONT(1)                         User Commands                        FONT(1)\n\n"
